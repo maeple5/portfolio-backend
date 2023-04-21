@@ -1,0 +1,53 @@
+name: Django CI on develop
+
+on:
+  push:
+    branches:
+      - feature01
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+
+    services:
+      db:
+        image: postgres
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Create local.env file
+      run: |
+        touch local.env
+        echo "DATABASE_URL=${{ secrets.DJANGO_DATABASE_URL }}" >> local.env
+        echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> local.env
+        echo "ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> local.env
+        echo "CSRF_TRUSTED_ORIGINS=${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}" >> local.env
+        echo "CORS_ORIGIN_WHITELIST=${{ secrets.DJANGO_CORS_ORIGIN_WHITELIST }}" >> local.env
+        echo "STATIC_URL=${{ secrets.DJANGO_STATIC_URL }}" >> local.env
+        echo "DEBUG=${{ vars.DJANGO_DEBUG }}" >> local.env
+        echo "LANGUAGE_CODE=${{ vars.DJANGO_LANGUAGE_CODE }}" >> local.env
+        echo "TIME_ZONE=${{ vars.DJANGO_TIME_ZONE }}" >> local.env
+    - name: Run Tests
+      run: |
+        python manage.py makemigrations
+        python manage.py migrate
+        python manage.py test
+        
