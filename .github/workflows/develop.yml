@@ -13,7 +13,7 @@ env:
   # GKE_ZONE: ${{ secrets.GKE_ZONE }}   # TODO: update to cluster zone
   GKE_ZONE: ${{ vars.GKE_ZONE }}   # TODO: update to cluster zone
   DEPLOYMENT_NAME: ${{ secrets.DEPLOYMENT_NAME }} # TODO: update to deployment name
-  REPOSITORY: ${{ secrets.REPOSITORY }} # TODO: update to Artifact Registry docker repository
+  REPOSITORY: ${{ secrets.DEV_REPOSITORY }} # TODO: update to Artifact Registry docker repository
   IMAGE: ${{ secrets.IMAGE }}
 
 jobs:
