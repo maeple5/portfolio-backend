@@ -22,11 +22,11 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   # GAR_LOCATION: ${{ secrets.GAR_LOCATION }} # TODO: update region of the Artifact Registry
   GAR_LOCATION: ${{ vars.GAR_LOCATION }} # TODO: update region of the Artifact Registry
-  GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}    # TODO: update to cluster name
+  GKE_CLUSTER: ${{ secrets.GKE_PROD_CLUSTER }}    # TODO: update to cluster name
   # GKE_ZONE: ${{ secrets.GKE_ZONE }}   # TODO: update to cluster zone
   GKE_ZONE: ${{ vars.GKE_ZONE }}   # TODO: update to cluster zone
   DEPLOYMENT_NAME: ${{ secrets.DEPLOYMENT_NAME }} # TODO: update to deployment name
-  REPOSITORY: ${{ secrets.REPOSITORY }} # TODO: update to Artifact Registry docker repository
+  REPOSITORY: ${{ secrets.PROD_REPOSITORY }} # TODO: update to Artifact Registry docker repository
   IMAGE: ${{ secrets.IMAGE }}
 jobs:
   setup-build-publish-deploy:
